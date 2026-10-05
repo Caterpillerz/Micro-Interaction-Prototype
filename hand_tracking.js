@@ -6,6 +6,7 @@ import {
 
 // These functions control the vision that sees the hand
 // and the camera/video on the website.
+// HAVING THE MODELS (.TASK FOLDERS) IS REQUIRED FOR THIS TO WORK
 
 const vision = await FilesetResolver.forVisionTasks(
   "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm",
@@ -71,3 +72,5 @@ function processHands(results) {
       `8: ${indexTip.x}, ${indexTip.y}`;
   }
 }
+
+startCamera();
