@@ -53,6 +53,8 @@ function renderLoop() {
 
 // These functions are specific to hand-tracking.
 
+// This seems to create the model for the hand,
+// (the graph of dots) using hand_landmarker.task
 const handLandmarker = await HandLandmarker.createFromOptions(vision, {
   baseOptions: {
     modelAssetPath: "./models/hand_landmarker.task",
@@ -61,6 +63,9 @@ const handLandmarker = await HandLandmarker.createFromOptions(vision, {
   numHands: 1,
 });
 
+// and this does something with that hand model.
+// I will probably create functions with a head like this
+// in order to process different gestures to perform different actions.
 function processHands(results) {
   if (results.landmarks.length > 0) {
     const hand = results.landmarks[0];
