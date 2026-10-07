@@ -6,10 +6,17 @@
         <link rel="stylesheet" href="style.css"/>
         <script type="module" src="gaze_tracking.js"></script>
         <script type="module" src="hand_tracking.js"></script>
+        <script type="module" src="pullup_page.js"></script>
         <title>Microinteraction Prototype</title>
     </head>
     <body>
+        <!-- The user inputs a PDF file that is parsed by the webpage
+         so that the tracking can track your eyes on the words (hopefully) -->
+        <div>
+            <h1>Interactive Book Reader</h1>
+            <label for="book">Your book here (PDF file):</label>
+            <input type="file" name="book">
+        </div>
         <video id="video" width="640" height="480" autoplay></video>
-        <!-- Todo: create an input for the file containing the book or pages. -->
     </body>
 </html>
