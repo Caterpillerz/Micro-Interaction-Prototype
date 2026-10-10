@@ -1,0 +1,259 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #f4f0e6;
+  color: #30271f;
+}
+
+button {
+  cursor: pointer;
+  padding: 0.5rem 0.8rem;
+}
+
+.topbar,
+.bottom-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.8rem 1.25rem;
+  background: #fffaf1;
+  border-bottom: 1px solid #d9cdbb;
+}
+
+.topbar h1 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.reader-shell {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) 200px;
+  gap: 1rem;
+  padding: 1rem;
+  min-height: 75vh;
+}
+
+#theme-controls,
+#definition-panel {
+  padding: 1rem;
+  background: #d27c60;
+  border: 1px solid #a4785d;
+  border-radius: 12px;
+  overflow-wrap: anywhere;
+}
+
+#theme-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+#theme-controls h3 {
+  margin: 0;
+}
+
+#theme-controls label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+#theme-select,
+#apply-theme-button {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font: inherit;
+}
+
+#theme-select {
+  border: 1px solid #cbd0d8;
+  background: white;
+  color: #222;
+}
+
+#apply-theme-button {
+  border: none;
+  background: #d27c60;
+  color: black;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#apply-theme-button:hover {
+  background: #de896d;
+}
+
+#apply-theme-button:focus-visible,
+#theme-select:focus-visible {
+  outline: 3px solid #78a6ff;
+  outline-offset: 2px;
+}
+
+#theme-status {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
+}
+
+#reading-stage {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#reading-stage {
+  position: relative;
+  min-width: 0;
+  min-height: 70vh;
+  padding: 1.25rem;
+  background: #fffdf8;
+  border: 1px solid #a4785d;
+  border-radius: 16px;
+}
+
+.artwork-placeholder {
+  min-height: 25vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  background: #f1c490;
+  border-radius: 12px;
+  color: #645747;
+}
+
+#reading-page {
+  max-width: 850px;
+  margin: 1.5rem auto;
+  padding: 0.5rem;
+}
+
+#story-text {
+  font-size: var(--reader-font-size, 2rem);
+  line-height: 1.65;
+}
+
+#story-text p {
+  margin: 0 0 1rem;
+}
+
+.gaze-word {
+  border-radius: 4px;
+  transition: background-color 100ms ease;
+}
+
+.gaze-word.gaze-selected {
+  background: #f1c490;
+  outline: 1px solid #f1c490;
+}
+
+.bottom-bar {
+  justify-content: center;
+  border-top: 1px solid #a4785d;
+  border-bottom: 0;
+}
+
+#calibration-target {
+  position: fixed;
+  z-index: 99998;
+
+  width: 42px;
+  height: 42px;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 3px solid white;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+
+  background: #e74c3c;
+  color: white;
+  font: 700 11px/1 sans-serif;
+
+  box-shadow: 0 0 0 2px #222;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+#calibration-target.is-complete {
+  background: #27ae60;
+  border-color: white;
+}
+
+#calibration-target.is-validation {
+  background: #3478db;
+  cursor: default;
+}
+
+#gaze-debug-dot {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  border: 3px solid white;
+  border-radius: 50%;
+  background: red;
+  box-shadow: 0 0 0 2px #222;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 99999;
+}
+
+#gaze-debug-dot[hidden] {
+  display: none;
+}
+
+@media (max-width: 850px) {
+  .reader-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #theme-controls,
+  #definition-panel {
+    min-height: auto;
+  }
+
+  #reading-stage {
+    min-height: 60vh;
+  }
+}
+
+.camera-preview {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #111;
+  border-radius: 12px;
+}
+
+.camera-preview video,
+.camera-preview canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.camera-preview video,
+.camera-preview canvas {
+  transform: scaleX(-1);
+}
+
+#facemesh-canvas {
+  pointer-events: none;
+}

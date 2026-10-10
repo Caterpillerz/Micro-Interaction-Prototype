@@ -1,23 +1,92 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="style.css"/>
-        <script type="module" src="gaze_tracking.js"></script>
-        <script type="module" src="hand_tracking.js"></script>
-        <script type="module" src="pullup_page.js"></script>
-        <title>Microinteraction Prototype</title>
-    </head>
-    <body>
-        <!-- The user inputs a PDF file that is parsed by the webpage
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive Book Reader</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Interactive Book Reader</h1>
+
+      <!-- The user inputs a PDF file that is parsed by the webpage
          so that the tracking can track your eyes on the words (hopefully) -->
-        <div>
-            <h1>Interactive Book Reader</h1>
-            <label for="book">Your book here (PDF file):</label>
-            <input type="file" name="book">
+      <label>
+        Upload a PDF
+        <input id="book-file" type="file" accept="application/pdf" />
+      </label>
+
+      <button id="calibrate-button">Calibrate gaze</button>
+      <span> Selected word: <strong id="selected-word">—</strong> </span>
+      <button id="test-define-button">Define selected word (test)</button>
+      <span id="status">Initializing...</span>
+    </header>
+
+    <main class="reader-shell">
+      <aside id="definition-panel">
+        <h2>Word definition</h2>
+        <p id="definition-word">Look at a word</p>
+        <p id="definition-body">
+          Use the victory gesture to look up the selected word.
+        </p>
+        <p id="definition-source"></p>
+      </aside>
+
+      <section id="reading-stage">
+        <div id="artwork" class="artwork-placeholder">
+          <p>Illustration for the current passage</p>
         </div>
-        <!-- keeping the video to test out gestures -->
-        <video id="video" width="640" height="480" autoplay></video>
-    </body>
+
+        <article id="reading-page">
+          <div id="story-text"></div>
+        </article>
+      </section>
+
+      <aside id="theme-controls">
+        <h3>Page Theme</h3>
+
+        <label for="theme-select">Background</label>
+
+        <select id="theme-select">
+          <option value="classic">Classic</option>
+          <option value="fantasy">Fantasy</option>
+          <option value="horror">Horror</option>
+          <option value="scifi">Sci-Fi</option>
+          <option value="mystery">Mystery</option>
+          <option value="sports">Sports</option>
+        </select>
+
+        <button id="apply-theme-button" type="button">Apply Theme</button>
+
+        <p id="theme-status">Choose a background for your story.</p>
+
+        <div class="camera-preview">
+          <video id="video" autoplay playsinline muted></video>
+          <canvas id="facemesh-canvas"></canvas>
+        </div>
+
+        <div id="gaze-debug-readout">Gaze: waiting for prediction…</div>
+
+        <!-- CASEY: your hand debug tools -->
+        <div id="hand-debug">
+          <p>Thumb: <span id="thumb-tip">Not detected</span></p>
+          <p>Index: <span id="index-tip">Not detected</span></p>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="bottom-bar">
+      <button id="previous-button">Previous</button>
+      <span id="page-status">Page 1</span>
+      <button id="next-button">Next</button>
+      <button id="zoom-out-button">A−</button>
+      <button id="zoom-in-button">A+</button>
+    </footer>
+
+    <div id="calibration-target" style="display: none"></div>
+
+    <div id="gaze-debug-dot" hidden></div>
+  </body>
 </html>
