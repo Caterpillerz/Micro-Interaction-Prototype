@@ -51,7 +51,6 @@ loadText(
 const readerStage = document.getElementById("reading-stage");
 const themeSelect = document.getElementById("theme-select");
 const applyThemeButton = document.getElementById("apply-theme-button");
-const themeStatus = document.getElementById("theme-status");
 
 const pageThemes = {
   classic: {
@@ -62,7 +61,7 @@ const pageThemes = {
   fantasy: {
     name: "Fantasy",
     image:
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=80",
+      "images/FantasyBackground.png",
   },
 
   horror: {
@@ -94,13 +93,6 @@ function applySelectedTheme() {
 
   const theme = pageThemes[themeSelect.value];
 
-  if (!theme) {
-    if (themeStatus) {
-      themeStatus.textContent = "Please choose a valid theme.";
-    }
-    return;
-  }
-
   const backgroundImage = `linear-gradient(
       rgba(255, 255, 255, 0.58),
       rgba(255, 255, 255, 0.72)
@@ -110,10 +102,6 @@ function applySelectedTheme() {
   readerStage.style.backgroundPosition = "center";
   readerStage.style.backgroundRepeat = "no-repeat";
   readerStage.style.backgroundSize = "cover";
-
-  if (themeStatus) {
-    themeStatus.textContent = `Theme applied: ${theme.name}`;
-  }
 }
 
 applyThemeButton?.addEventListener("click", applySelectedTheme);

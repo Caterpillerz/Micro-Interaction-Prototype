@@ -4,6 +4,8 @@
 
 body {
   margin: 0;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
   background: #f4f0e6;
   color: #30271f;
@@ -36,7 +38,7 @@ button {
   grid-template-columns: 150px minmax(0, 1fr) 200px;
   gap: 1rem;
   padding: 1rem;
-  min-height: 75vh;
+  flex: 1;
 }
 
 #theme-controls,
@@ -52,7 +54,6 @@ button {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 20px;
 }
 
 #theme-controls h3 {
@@ -97,13 +98,6 @@ button {
   outline-offset: 2px;
 }
 
-#theme-status {
-  margin: 0;
-  font-size: 12px;
-  color: #666;
-  line-height: 1.4;
-}
-
 #reading-stage {
   background-position: center;
   background-repeat: no-repeat;
@@ -121,7 +115,7 @@ button {
 }
 
 .artwork-placeholder {
-  min-height: 25vh;
+  min-height: 40vh;
   display: grid;
   place-items: center;
   text-align: center;
@@ -134,6 +128,8 @@ button {
   max-width: 850px;
   margin: 1.5rem auto;
   padding: 0.5rem;
+  display: flex;
+  align-items: center;
 }
 
 #story-text {
@@ -159,6 +155,7 @@ button {
   justify-content: center;
   border-top: 1px solid #a4785d;
   border-bottom: 0;
+  margin-top: auto;
 }
 
 #calibration-target {
