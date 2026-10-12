@@ -42,9 +42,9 @@ let lastVideoTime = -1;
 
 // placeholder story
 loadText(
-  "The weary traveler entered a quiet village at sunset. " +
-    "A lantern flickered beside the door of an enormous house. " +
-    "Inside, a bewildered child waited beside the fireplace. " +
+  "The weary traveler entered a quiet village at sunset." +
+    "A lantern flickered beside the door of an enormous house." +
+    "Inside, a bewildered child waited beside the fireplace." +
     "Outside, the evening wind whispered through the trees.",
 );
 
