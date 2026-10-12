@@ -19,6 +19,20 @@ export async function createHandTracker(vision) {
 
 }
 
+// This seems to create the model for recognized gestures
+// using gesture_recognizer.task
+// export async function createHandTracker(vision) {
+//   const gestureRecognizer = await gestureRecognizer.createFromOptions(vision, {
+//   baseOptions: {
+//     modelAssetPath: "./models/gesture_recognizer.task",
+//   },
+
+//   });
+
+//   return gestureRecognizer;
+
+// }
+
 // and this does something with that hand model.
 // I will probably create functions with a head like this
 // in order to process different gestures to perform different actions.
@@ -27,11 +41,30 @@ export function processHands(results, emitGesture) {
     const hand = results.landmarks[0];
     const thumbTip = hand[4];
     const indexTip = hand[8];
+
+    // getting the fingertips' distance from each other.
+    let y_distance = indexTip.y - thumbTip.y;
+    let x_distance = indexTip.x - thumbTip.x;
+    let distance = (x_distance ** 2) + (y_distance ** 2);
     
     document.getElementById("thumb-tip").textContent =
       `4: ${thumbTip.x}, ${thumbTip.y}`;
     document.getElementById("index-tip").textContent =
       `8: ${indexTip.x}, ${indexTip.y}`;
+    document.getElementById("total-dist").textContent = 
+      `4-8: ${distance}`;
+
+
+    // zoom-out
+    if (distance < 0.01) {
+      emitGesture("zoom-out");
+    }
+
+    // zoom-in
+    if (distance > 0.1) {
+      emitGesture("zoom-in");
+    }
+
     
     // CASEY: gesture recognition goes here. when a gesture is recognized, call:
     // emitGesture("next-page");
@@ -42,3 +75,22 @@ export function processHands(results, emitGesture) {
     
   }
 }
+
+// export function processGestures(results, emitGesture) {
+//   if (results.landmarks.length > 0) {
+//     const hand = results.landmarks[0];
+
+//     // pull up a definition with the victory gesture
+//     // if () {
+
+//     // }
+
+    
+//     // CASEY: gesture recognition goes here. when a gesture is recognized, call:
+//     // emitGesture("next-page");
+//     // emitGesture("previous-page");
+//     // emitGesture("zoom-in");
+//     // emitGesture("zoom-out");
+//     // emitGesture("define-word");
+    
+//   }
