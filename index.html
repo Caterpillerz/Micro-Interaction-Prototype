@@ -6,6 +6,14 @@
     <title>Interactive Book Reader</title>
     <link rel="stylesheet" href="./styles.css" />
     <script type="module" src="./app.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=MedievalSharp&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <header class="topbar">
@@ -13,20 +21,26 @@
 
       <!-- The user inputs a PDF file that is parsed by the webpage
          so that the tracking can track your eyes on the words (hopefully) -->
-      <label>
+      <!-- <label>
         Upload a PDF
         <input id="book-file" type="file" accept="application/pdf" />
-      </label>
+      </label> -->
+      <div id="story-select-container">
+        <label for="story-select">Choose a story:</label>
+
+        <select id="story-select">
+          <option value="cinderella">Cinderella</option>
+          <option value="threepigs">Three Little Pigs</option>
+        </select>
+      </div>
 
       <button id="calibrate-button">Calibrate gaze</button>
-      <span> Selected word: <strong id="selected-word">—</strong> </span>
-      <button id="test-define-button">Define selected word (test)</button>
       <span id="status">Initializing...</span>
     </header>
 
     <main class="reader-shell">
       <aside id="definition-panel">
-        <h2>Word definition</h2>
+        <h2>Dictionary</h2>
         <p id="definition-word">Look at a word</p>
         <p id="definition-body">
           Use the victory gesture to look up the selected word.
@@ -44,8 +58,8 @@
         </article>
       </section>
 
-      <aside id="theme-controls">
-        <h3>Page Theme</h3>
+      <aside id="page-tools">
+        <h3>Site Tools</h3>
 
         <label for="theme-select">Background</label>
 
@@ -57,8 +71,6 @@
           <option value="mystery">Mystery</option>
           <option value="sports">Sports</option>
         </select>
-
-        <button id="apply-theme-button" type="button">Apply Theme</button>
 
         <div class="camera-preview">
           <video id="video" autoplay playsinline muted></video>

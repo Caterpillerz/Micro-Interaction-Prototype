@@ -27,6 +27,8 @@ import { lookupDefinition } from "./definitions.js";
 
 import { createHandTracker, processHands } from "./hand_tracking.js";
 
+import { initializeStoryLoader } from "./story_loader.js";
+
 const video = document.getElementById("video");
 const status = document.getElementById("status");
 
@@ -40,48 +42,52 @@ let latestFeature = null;
 let calibration = null;
 let lastVideoTime = -1;
 
-// placeholder story
-loadText(
-  "The weary traveler entered a quiet village at sunset." +
-    "A lantern flickered beside the door of an enormous house." +
-    "Inside, a bewildered child waited beside the fireplace." +
-    "Outside, the evening wind whispered through the trees.",
-);
+initializeStoryLoader();
 
 const readerStage = document.getElementById("reading-stage");
 const themeSelect = document.getElementById("theme-select");
-const applyThemeButton = document.getElementById("apply-theme-button");
 
 const pageThemes = {
   classic: {
     name: "Classic",
-    image: "",
+    image: "images/BookBackgroundTest.png",
+    accent: "#d27c60",
+    font: "EB Garamond, serif",
   },
 
   fantasy: {
     name: "Fantasy",
-    image:
-      "images/FantasyBackground.png",
+    image: "images/FantasyBackground.png",
+    accent: "#2596be",
+    font: '"MedievalSharp", cursive',
   },
 
   horror: {
     name: "Horror",
     image: "",
+    accent: "#FF0000",
+    font: "",
   },
 
   scifi: {
     name: "Sci-Fi",
     image: "",
+    accent: "#00FF00",
+    font: "",
   },
 
   mystery: {
     name: "Mystery",
     image: "",
+    accent: "#FFFF00",
+    font: "",
   },
 
   sports: {
     name: "Sports",
     image: "",
+    accent: "#8B00FF",
+    font: "",
   },
 };
 
@@ -92,6 +98,10 @@ function applySelectedTheme() {
   }
 
   const theme = pageThemes[themeSelect.value];
+
+  document.documentElement.style.setProperty("--theme-accent", theme.accent);
+
+  document.documentElement.style.setProperty("--theme-font", theme.font);
 
   const backgroundImage = `linear-gradient(
       rgba(255, 255, 255, 0.58),
@@ -104,7 +114,7 @@ function applySelectedTheme() {
   readerStage.style.backgroundSize = "cover";
 }
 
-applyThemeButton?.addEventListener("click", applySelectedTheme);
+themeSelect?.addEventListener("change", applySelectedTheme);
 
 // -----------------------------
 // shared interface
@@ -171,6 +181,7 @@ function handleGesture(gesture) {
   }
 }
 
+/*
 // PDF importer integration:
 window.readerAPI = {
   loadText(text) {
@@ -182,6 +193,7 @@ window.readerAPI = {
   zoomOut,
   defineSelectedWord: showDefinition,
 };
+*/
 
 // manual controls for testing without hand gestures.
 document
