@@ -66,7 +66,8 @@
       </section>
 
       <aside id="page-tools">
-        <h3>Site Tools</h3>
+        <h2>Page Tools</h2>
+        <h3>Site Theme</h3>
 
         <label for="theme-select">Background</label>
 
@@ -79,12 +80,22 @@
           <option value="sports">Sports</option>
         </select>
 
+        <h3>Gesture Controls</h3>
+        <div class="gesture">
+          <img src="images/PinchGesture.png" alt="Pinch gesture" style="width: 100%;"/>
+          <p><strong>Pinch:</strong> zoom in/out</p>
+        </div>
+        <div class="gesture">
+          <img src="images/VictoryGesture.png" alt="Victory gesture" style="width: 100%;"/>
+          <p><strong>Victory:</strong> define selected word</p>
+        </div>
+
+        <h3>Camera Preview</h3>
+
         <div class="camera-preview">
           <video id="video" autoplay playsinline muted></video>
           <canvas id="facemesh-canvas"></canvas>
         </div>
-
-        <div id="gaze-debug-readout">Gaze: waiting for prediction…</div>
 
         <!-- CASEY: your hand debug tools -->
         <div id="hand-debug">
@@ -210,11 +221,6 @@
               class="calibration-result-metrics"
             ></p>
           </div>
-
-          <p class="calibration-modal-note">
-            This is a center-point check, not a guarantee of accuracy across the
-            entire reading area.
-          </p>
 
           <div class="calibration-modal-actions">
             <button

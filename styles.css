@@ -39,6 +39,7 @@ button:active {
 }
 
 #definition-panel h2,
+#page-tools h2,
 #page-tools h3,
 #selected-word {
   color: var(--theme-accent);
