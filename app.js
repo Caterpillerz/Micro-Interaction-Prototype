@@ -27,7 +27,9 @@ import {
 
 import { showDefinition, initializeDefinitionPanel } from "./definitions.js";
 
-import { createHandTracker, processHands } from "./hand_tracking.js";
+// Casey: import specific functions from hand_tracking.js,
+// for hand and gesture tracking
+import { createHandTracker, processHands, createGestureTracker, processGesture } from "./hand_tracking.js";
 
 import { initializeStoryLoader } from "./story_loader.js";
 
@@ -38,6 +40,8 @@ const status = document.getElementById("status");
 
 let faceLandmarker = null;
 let handTracker = null;
+// Casey: adding the gesture recognizer
+let gestureRecognizer = null;
 
 const featureHistory = [];
 const predictionHistory = [];
@@ -193,6 +197,12 @@ function renderLoop() {
 
         processHands(handResults, handleGesture);
       }
+      // Casey: adding the condition for the gesture recognizer
+      if (gestureRecognizer) {
+        const gestureResults = gestureRecognizer.recognizeForVideo(video, timestamp);
+
+        processGesture(gestureResults);
+      }
     } catch (error) {
       console.error("Vision processing error:", error);
     }
@@ -220,7 +230,9 @@ async function initialize() {
     });
 
     // null is ok while hand tracking is unfinished
+    // Casey: adding the call to create gesture tracker
     handTracker = await createHandTracker(vision);
+    gestureRecognizer = await createGestureTracker(vision);
 
     const stream = await navigator.mediaDevices.getUserMedia({
       video: {

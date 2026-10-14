@@ -79,7 +79,7 @@ export function processHands(results, emitGesture) {
   }
 }
 
-function processGesture(results) {
+export function processGesture(results) {
   if (results.gestures.length > 0) {
     const gesture = results.gestures[0][0];
     const gestureType = gesture.categoryName;
