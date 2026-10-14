@@ -1,6 +1,8 @@
 import {
   HandLandmarker,
+  GestureRecognizer
 } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.mjs";
+
 
 // These functions are specific to hand-tracking.
 
@@ -20,18 +22,19 @@ export async function createHandTracker(vision) {
 }
 
 // This seems to create the model for recognized gestures
-// using gesture_recognizer.task
-// export async function createHandTracker(vision) {
-//   const gestureRecognizer = await gestureRecognizer.createFromOptions(vision, {
-//   baseOptions: {
-//     modelAssetPath: "./models/gesture_recognizer.task",
-//   },
+export async function createGestureTracker(vision) {
+  const gestureRecognizer = await GestureRecognizer.createFromOptions(vision, {
+    baseOptions: {
+      modelAssetPath: "./models/gesture_recognizer.task"
+    },
+    runningMode: "VIDEO",
+    numHands: 1
+  });
 
-//   });
 
-//   return gestureRecognizer;
+  return gestureRecognizer;
+}
 
-// }
 
 // and this does something with that hand model.
 // I will probably create functions with a head like this
@@ -76,21 +79,13 @@ export function processHands(results, emitGesture) {
   }
 }
 
-// export function processGestures(results, emitGesture) {
-//   if (results.landmarks.length > 0) {
-//     const hand = results.landmarks[0];
+function processGesture(results) {
+  if (results.gestures.length > 0) {
+    const gesture = results.gestures[0][0];
+    const gestureType = gesture.categoryName;
+    document.getElementById("gest").textContent = gestureType;
 
-//     // pull up a definition with the victory gesture
-//     // if () {
 
-//     // }
-
-    
-//     // CASEY: gesture recognition goes here. when a gesture is recognized, call:
-//     // emitGesture("next-page");
-//     // emitGesture("previous-page");
-//     // emitGesture("zoom-in");
-//     // emitGesture("zoom-out");
-//     // emitGesture("define-word");
-    
-//   }
+    console.log(gestureType);
+  }
+}
