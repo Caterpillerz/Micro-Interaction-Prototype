@@ -135,7 +135,7 @@ function renderScreen() {
     artwork.replaceChildren(caption);
   }
 
-  pageStatus.textContent = `Reading segment ${screenIndex + 1} of ${readingScreens.length}`;
+  pageStatus.textContent = `Page ${screenIndex + 1} of ${readingScreens.length}`;
 }
 
 export function loadText(text, sentencesPerScreen = 2, options = {}) {

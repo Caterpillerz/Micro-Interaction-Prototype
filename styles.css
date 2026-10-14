@@ -278,6 +278,119 @@ input:focus-visible {
   display: none;
 }
 
+.calibration-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200000;
+
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+
+  background: rgba(48, 39, 31, 0.58);
+  backdrop-filter: blur(3px);
+}
+
+#calibration-modal[hidden],
+#calibration-modal [hidden] {
+  display: none !important;
+}
+
+.calibration-modal-window {
+  position: relative;
+  width: min(580px, 100%);
+  max-height: min(85vh, 760px);
+  overflow-y: auto;
+
+  padding: clamp(1.4rem, 4vw, 2rem);
+  padding-top: 2.5rem;
+
+  color: #30271f;
+  background: #fffaf1;
+  border: 1px solid var(--theme-accent);
+  border-radius: 18px;
+
+  box-shadow: 0 24px 80px rgba(48, 39, 31, 0.28);
+  font-family: var(--theme-font);
+}
+
+.calibration-modal-window h2 {
+  margin: 0 2rem 1rem 0;
+  color: var(--theme-accent);
+  font-size: 1.65rem;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.calibration-modal-lead {
+  font-size: 1.15rem;
+  line-height: 1.5;
+}
+
+.calibration-instructions {
+  padding-left: 1.5rem;
+  line-height: 1.55;
+}
+
+.calibration-instructions li {
+  padding-left: 0.25rem;
+  margin-bottom: 0.65rem;
+}
+
+.calibration-modal-note {
+  padding: 0.8rem 1rem;
+  background: #f4f0e6;
+  border-left: 3px solid var(--theme-accent);
+  border-radius: 6px;
+
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+.calibration-modal-notice {
+  color: var(--theme-accent);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.calibration-modal-close {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+
+  width: 2.3rem;
+  height: 2.3rem;
+  padding: 0;
+
+  border-radius: 50%;
+  font-family: Arial, sans-serif;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.calibration-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.calibration-modal-actions button {
+  min-height: 42px;
+}
+
+.calibration-modal-window .secondary-button {
+  background: #fffaf1;
+  color: #30271f;
+  border: 1px solid var(--theme-accent);
+}
+
+.calibration-modal-window button:focus-visible {
+  outline: 3px solid var(--theme-accent);
+  outline-offset: 3px;
+}
+
 @media (max-width: 850px) {
   .reader-shell {
     grid-template-columns: minmax(0, 1fr);
@@ -318,4 +431,14 @@ input:focus-visible {
 
 #facemesh-canvas {
   pointer-events: none;
+}
+
+@media (max-width: 520px) {
+  .calibration-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .calibration-modal-actions button {
+    width: 100%;
+  }
 }
