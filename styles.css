@@ -39,6 +39,7 @@ button:active {
 }
 
 #definition-panel h2,
+#page-tools h2,
 #page-tools h3,
 #selected-word {
   color: var(--theme-accent);
@@ -82,7 +83,7 @@ input:focus-visible {
 
 .reader-shell {
   display: grid;
-  grid-template-columns: 150px minmax(0, 1fr) 200px;
+  grid-template-columns: 300px minmax(0, 1fr) 200px;
   gap: 1rem;
   padding: 1rem;
   flex: 1;
