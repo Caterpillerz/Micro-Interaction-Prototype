@@ -223,6 +223,31 @@ input:focus-visible {
   margin-top: auto;
 }
 
+.calibration-result-copy {
+  margin: 1rem 0 1.25rem;
+  text-align: left;
+}
+
+.calibration-result-copy p {
+  margin: 0;
+  font: inherit;
+  line-height: 1.5;
+}
+
+.calibration-result-summary {
+  margin-bottom: 0.35rem !important;
+  font-weight: 600 !important;
+}
+
+.calibration-result-recommendation {
+  margin-bottom: 0.85rem !important;
+}
+
+.calibration-result-metrics {
+  font-size: 0.9em !important;
+  opacity: 0.8;
+}
+
 #calibration-target {
   position: fixed;
   z-index: 99998;

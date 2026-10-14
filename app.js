@@ -12,6 +12,7 @@ import {
   extractGazeFeature,
   projectGaze,
   updateGazeDebugDot,
+  createGazeSmoother,
 } from "./gaze_tracking.js";
 
 import {
@@ -44,6 +45,8 @@ const predictionHistory = [];
 let latestFeature = null;
 let calibration = null;
 let lastVideoTime = -1;
+
+const gazeSmoother = createGazeSmoother(0.28);
 
 const gazeCalibration = initializeGazeCalibration({
   status,
@@ -154,28 +157,34 @@ function renderLoop() {
       }
 
       if (latestFeature && calibration) {
-        const point = projectGaze(latestFeature, calibration);
+        const rawPoint = projectGaze(latestFeature, calibration);
+        const point = gazeSmoother.update(rawPoint);
 
-        updateGazeDebugDot(point);
+        if (point) {
+          updateGazeDebugDot(point);
 
-        const screenX = point.x * window.innerWidth;
-        const screenY = point.y * window.innerHeight;
+          const screenX = point.x * window.innerWidth;
+          const screenY = point.y * window.innerHeight;
 
-        predictionHistory.push({
-          time: performance.now(),
-          x: screenX,
-          y: screenY,
-        });
+          predictionHistory.push({
+            time: performance.now(),
+            x: screenX,
+            y: screenY,
+          });
 
-        while (
-          predictionHistory.length &&
-          performance.now() - predictionHistory[0].time > 8000
-        ) {
-          predictionHistory.shift();
+          while (
+            predictionHistory.length &&
+            performance.now() - predictionHistory[0].time > 8000
+          ) {
+            predictionHistory.shift();
+          }
+
+          selectWordAt(screenX, screenY);
+        } else {
+          updateGazeDebugDot(null);
         }
-
-        selectWordAt(screenX, screenY);
       } else {
+        gazeSmoother.reset();
         updateGazeDebugDot(null);
       }
 
@@ -265,24 +274,6 @@ function drawFaceMesh(results) {
   if (!landmarks) {
     return;
   }
-
-  drawingUtils.drawConnectors(
-    landmarks,
-    FaceLandmarker.FACE_LANDMARKS_TESSELATION,
-    {
-      color: "#85F5B4A0",
-      lineWidth: 1,
-    },
-  );
-
-  drawingUtils.drawConnectors(
-    landmarks,
-    FaceLandmarker.FACE_LANDMARKS_FACE_OVAL,
-    {
-      color: "#FFFFFF",
-      lineWidth: 1.5,
-    },
-  );
 
   drawingUtils.drawConnectors(
     landmarks,

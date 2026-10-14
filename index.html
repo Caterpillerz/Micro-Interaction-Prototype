@@ -136,7 +136,7 @@
               order, followed by one in the center.
             </li>
             <li>
-              Look directly at each dot and click it five times without looking
+              Look directly at each dot and click it three times without looking
               away. It will turn green when complete.
             </li>
             <li>
@@ -170,9 +170,45 @@
             </button>
           </div>
         </div>
+        <div id="calibration-validation-view" hidden>
+          <p class="calibration-modal-lead">
+            Great job! Your calibration points are complete.
+          </p>
 
+          <p>
+            One quick check remains. A blue dot will appear in the center of the
+            reading area.
+          </p>
+
+          <ol class="calibration-instructions">
+            <li>Look directly at the blue dot as soon as it appears.</li>
+            <li>Keep your eyes on it for a few seconds.</li>
+            <li>Don't click the dot or move your head around.</li>
+          </ol>
+
+          <p class="calibration-modal-note">
+            We'll use this quick check to estimate how closely your gaze
+            predictions match the point you're looking at.
+          </p>
+
+          <div class="calibration-modal-actions">
+            <button id="calibration-validation-start-button" type="button">
+              Start center check
+            </button>
+          </div>
+        </div>
         <div id="calibration-result-view" hidden>
-          <p id="calibration-result-text" class="calibration-modal-lead"></p>
+          <div id="calibration-result-text" class="calibration-result-copy">
+            <p
+              id="calibration-result-summary"
+              class="calibration-result-summary"
+            ></p>
+            <p id="calibration-result-recommendation"></p>
+            <p
+              id="calibration-result-metrics"
+              class="calibration-result-metrics"
+            ></p>
+          </div>
 
           <p class="calibration-modal-note">
             This is a center-point check, not a guarantee of accuracy across the

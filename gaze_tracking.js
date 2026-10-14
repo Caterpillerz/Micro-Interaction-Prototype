@@ -77,6 +77,33 @@ export function updateGazeDebugDot(gazePoint) {
   gazeReadout.textContent = `Gaze: x=${Math.round(x)}, y=${Math.round(y)} px`;
 }
 
+export function createGazeSmoother(alpha = 0.28) {
+  const smoothing = Math.max(0.01, Math.min(1, alpha));
+  let previous = null;
+
+  return {
+    update(point) {
+      if (!point || !Number.isFinite(point.x) || !Number.isFinite(point.y)) {
+        previous = null;
+        return null;
+      }
+
+      if (!previous) {
+        previous = { x: point.x, y: point.y };
+      } else {
+        previous.x += smoothing * (point.x - previous.x);
+        previous.y += smoothing * (point.y - previous.y);
+      }
+
+      return { ...previous };
+    },
+
+    reset() {
+      previous = null;
+    },
+  };
+}
+
 function solveLinearSystem(matrix, values) {
   const n = values.length;
   const a = matrix.map((row, i) => [...row, values[i]]);

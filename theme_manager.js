@@ -3,14 +3,14 @@
 const pageThemes = {
   classic: {
     name: "Classic",
-    image: "images/BookBackgroundTest.png",
+    image: "images/theme-backgrounds/BookBackgroundTest.png",
     accent: "#d27c60",
     font: '"EB Garamond", serif',
   },
 
   fantasy: {
     name: "Fantasy",
-    image: "images/FantasyBackground.png",
+    image: "images/theme-backgrounds/FantasyBackground.png",
     accent: "#2596be",
     font: '"MedievalSharp", cursive',
   },

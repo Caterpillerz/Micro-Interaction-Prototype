@@ -46,8 +46,24 @@ export function initializeGazeCalibration({
   const calibrationRetryButton = document.getElementById(
     "calibration-retry-button",
   );
+  const calibrationValidationView = document.getElementById(
+    "calibration-validation-view",
+  );
+  const calibrationValidationStartButton = document.getElementById(
+    "calibration-validation-start-button",
+  );
+  const calibrationResultSummary = document.getElementById(
+    "calibration-result-summary",
+  );
+  const calibrationResultRecommendation = document.getElementById(
+    "calibration-result-recommendation",
+  );
+  const calibrationResultMetrics = document.getElementById(
+    "calibration-result-metrics",
+  );
 
   let calibrationInProgress = false;
+  const CLICKS_PER_TARGET = 3;
 
   // -----------------------------
   // Calibration modal controls
@@ -58,6 +74,7 @@ export function initializeGazeCalibration({
 
     calibrationModalTitle.textContent = "Ready to calibrate your gaze?";
     calibrationIntroView.hidden = false;
+    calibrationValidationView.hidden = true;
     calibrationResultView.hidden = true;
     calibrationModalNotice.textContent = notice;
     calibrationModal.hidden = false;
@@ -71,16 +88,33 @@ export function initializeGazeCalibration({
     }
   }
 
-  function showCalibrationResult(message) {
+  function showCalibrationResult({ summary, recommendation, metrics = "" }) {
     if (!calibrationModal) return;
 
-    calibrationModalTitle.textContent = "Your calibration results";
+    calibrationModalTitle.textContent = "Calibration results";
     calibrationIntroView.hidden = true;
+    calibrationValidationView.hidden = true;
     calibrationResultView.hidden = false;
-    calibrationResultText.textContent = message;
-    calibrationModal.hidden = false;
 
+    calibrationResultSummary.textContent = summary;
+    calibrationResultRecommendation.textContent = recommendation;
+    calibrationResultMetrics.textContent = metrics;
+    calibrationResultMetrics.hidden = !metrics;
+
+    calibrationModal.hidden = false;
     calibrationResultCloseButton?.focus();
+  }
+
+  function showValidationInstructions() {
+    if (!calibrationModal) return;
+
+    calibrationModalTitle.textContent = "One last quick check";
+    calibrationIntroView.hidden = true;
+    calibrationValidationView.hidden = false;
+    calibrationResultView.hidden = true;
+
+    calibrationModal.hidden = false;
+    calibrationValidationStartButton?.focus();
   }
 
   calibrationStartButton?.addEventListener("click", () => {
@@ -98,6 +132,11 @@ export function initializeGazeCalibration({
     closeCalibrationModal();
     status.textContent =
       "Calibration skipped. You can calibrate later using the button above.";
+  });
+
+  calibrationValidationStartButton?.addEventListener("click", () => {
+    closeCalibrationModal();
+    runCalibrationValidation();
   });
 
   calibrationModalCloseButton?.addEventListener("click", closeCalibrationModal);
@@ -188,7 +227,7 @@ export function initializeGazeCalibration({
     };
   }
 
-  function collectFiveClicksForTarget(
+  function collectClicksForTarget(
     targetDot,
     targetViewport,
     pointIndex,
@@ -199,7 +238,7 @@ export function initializeGazeCalibration({
       let clickCount = 0;
       let lastAcceptedClick = -Infinity;
 
-      targetDot.textContent = "0/5";
+      targetDot.textContent = `0/${CLICKS_PER_TARGET}`;
       targetDot.classList.remove("is-complete");
 
       const handleClick = () => {
@@ -228,12 +267,17 @@ export function initializeGazeCalibration({
         });
 
         clickCount += 1;
-        targetDot.textContent = clickCount < 5 ? `${clickCount}/5` : "✓";
 
-        if (clickCount < 5) {
+        targetDot.textContent =
+          clickCount < CLICKS_PER_TARGET
+            ? `${clickCount}/${CLICKS_PER_TARGET}`
+            : "✓";
+
+        if (clickCount < CLICKS_PER_TARGET) {
           status.textContent =
             `Point ${pointIndex}/${totalPoints}: ` +
-            `${clickCount}/5 clicks recorded. Keep looking at the dot.`;
+            `${clickCount}/${CLICKS_PER_TARGET} clicks recorded. ` +
+            "Keep looking at the dot.";
           return;
         }
 
@@ -294,10 +338,13 @@ export function initializeGazeCalibration({
 
     if (predictions.length < 10) {
       const message =
-        "Calibration was fitted, but too few gaze samples were collected " +
-        "for validation. Check the camera view and try again.";
+        "We couldn't collect enough steady gaze readings to judge this calibration.\n\n" +
+        "You can continue reading, but we can't yet tell how well the gaze tracker " +
+        "will follow your eyes.\n\n" +
+        "For a better result, check that your face is well lit, both eyes are " +
+        "visible, and the camera can see you clearly.";
 
-      status.textContent = message;
+      status.textContent = "Not enough gaze data to estimate accuracy.";
       showCalibrationResult(message);
       return;
     }
@@ -319,16 +366,33 @@ export function initializeGazeCalibration({
     const sortedDistances = [...distances].sort((a, b) => a - b);
     const medianError = sortedDistances[Math.floor(sortedDistances.length / 2)];
 
-    const message =
-      `${accuracyPercent}% of your gaze samples landed within ` +
-      `${radiusPixels} pixels of the center target.\n\n` +
-      `Median distance from target: ${Math.round(medianError)} pixels.\n` +
-      `Valid samples: ${predictions.length}.\n\n` +
-      "This measures the center point only, not the entire reader.";
+    let summary;
+    let recommendation;
+
+    if (accuracyPercent >= 80 && medianError <= 100) {
+      summary = "Calibration looks good.";
+      recommendation = "Continue reading. Recalibrate if the gaze dot drifts.";
+    } else if (accuracyPercent >= 50 && medianError <= 200) {
+      summary = "Tracking may wander at times.";
+      recommendation =
+        "You can continue. Recalibrate if word selection feels off.";
+    } else {
+      summary = "Tracking may be inaccurate.";
+      recommendation =
+        "Recalibrate with better lighting and both eyes visible.";
+    }
+
+    showCalibrationResult({
+      summary,
+      recommendation,
+      metrics:
+        `Center check: ${accuracyPercent}% within ${radiusPixels}px; ` +
+        `median distance ${Math.round(medianError)}px. Center only.`,
+    });
 
     status.textContent =
-      `Center validation: ${accuracyPercent}% within ${radiusPixels}px. ` +
-      `Median error: ${Math.round(medianError)}px.`;
+      `Center check: ${accuracyPercent}% within ${radiusPixels}px. ` +
+      `Median distance: ${Math.round(medianError)}px.`;
 
     showCalibrationResult(message);
   }
@@ -386,13 +450,13 @@ export function initializeGazeCalibration({
         const targetViewport = placeTargetWithinStage(targetDot, stage, target);
 
         targetDot.classList.remove("is-complete", "is-validation");
-        targetDot.textContent = "0/5";
+        targetDot.textContent = "0/3";
 
         status.textContent =
           `Calibration point ${i + 1}/${sequence.length}: ` +
-          "look at the dot, then click it five times.";
+          "look at the dot, then click it three times.";
 
-        await collectFiveClicksForTarget(
+        await collectClicksForTarget(
           targetDot,
           targetViewport,
           i + 1,
@@ -403,18 +467,20 @@ export function initializeGazeCalibration({
         await delay(250);
       }
 
-      if (samples.length !== 45) {
+      const expectedSamples = sequence.length * CLICKS_PER_TARGET;
+
+      if (samples.length !== expectedSamples) {
         throw new Error(
-          `Expected 45 calibration samples but collected ${samples.length}.`,
+          `Expected ${expectedSamples} calibration samples but collected ${samples.length}.`,
         );
       }
 
       setCalibration(fitCalibration(samples));
 
       status.textContent =
-        "Calibration complete. Starting center validation...";
+        "Calibration complete. One quick gaze check remains.";
 
-      await runCalibrationValidation();
+      showValidationInstructions();
     } catch (error) {
       setCalibration(null);
       updateGazeDebugDot(null);
