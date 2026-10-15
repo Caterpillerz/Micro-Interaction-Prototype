@@ -57,7 +57,6 @@ export function processHands(results, emitGesture) {
     document.getElementById("total-dist").textContent = 
       `4-8: ${distance}`;
 
-
     // zoom-out
     if (distance < 0.01) {
       emitGesture("zoom-out");
@@ -67,6 +66,26 @@ export function processHands(results, emitGesture) {
     if (distance > 0.1) {
       emitGesture("zoom-in");
     }
+
+    // creating displacement variables (past and current positions) 
+    // for flipping pages. Only using the index finger.
+    // let past_xPosition = indexTip.x;
+    // let curr_xPosition;
+
+
+    // let timer = setInterval(function() {
+    //   curr_xPosition = indexTip.x;
+    //   let displacement = curr_xPosition - past_xPosition;
+    //   if (displacement >= 0.5) {
+    //     emitGesture("previous-page");
+    //   }
+    //   if (displacement <= -0.5) {
+    //     emitGesture("next-page");
+    //   }
+
+    // }, 500);
+
+
 
     
     // CASEY: gesture recognition goes here. when a gesture is recognized, call:
@@ -78,6 +97,13 @@ export function processHands(results, emitGesture) {
     
   }
 }
+
+// I'm going to create a separate helper function for logging the index finger's
+// x in moments of time. I think having this function NOT be called in app.js's renderLoop()
+// will be the secret sauce to getting the page flipping functions off the ground.
+// function getPastXPosition() {
+
+// } 
 
 export function processGesture(results, emitGesture) {
   if (results.gestures.length > 0) {
