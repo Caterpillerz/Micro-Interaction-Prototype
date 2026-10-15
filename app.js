@@ -29,7 +29,12 @@ import { showDefinition, initializeDefinitionPanel } from "./definitions.js";
 
 // Casey: import specific functions from hand_tracking.js,
 // for hand and gesture tracking
-import { createHandTracker, processHands, createGestureTracker, processGesture } from "./hand_tracking.js";
+import {
+  createHandTracker,
+  processHands,
+  createGestureTracker,
+  processGesture,
+} from "./hand_tracking.js";
 
 import { initializeStoryLoader } from "./story_loader.js";
 
@@ -167,6 +172,14 @@ function renderLoop() {
         if (point) {
           updateGazeDebugDot(point);
 
+          // TEMPORARY GAZE DEBUGGING
+          console.log("Gaze prediction:", {
+            feature: latestFeature,
+            rawPoint,
+            smoothedPoint: point,
+            dotVisible: !document.getElementById("gaze-debug-dot").hidden,
+          });
+
           const screenX = point.x * window.innerWidth;
           const screenY = point.y * window.innerHeight;
 
@@ -190,6 +203,13 @@ function renderLoop() {
       } else {
         gazeSmoother.reset();
         updateGazeDebugDot(null);
+
+        // TEMPORARY GAZE DEBUGGING
+        if (!latestFeature) {
+          console.warn("Gaze unavailable: no valid eye feature.");
+        } else if (!calibration) {
+          console.warn("Gaze unavailable: calibration is null.");
+        }
       }
 
       if (handTracker) {
@@ -199,7 +219,10 @@ function renderLoop() {
       }
       // Casey: adding the condition for the gesture recognizer
       if (gestureRecognizer) {
-        const gestureResults = gestureRecognizer.recognizeForVideo(video, timestamp);
+        const gestureResults = gestureRecognizer.recognizeForVideo(
+          video,
+          timestamp,
+        );
 
         processGesture(gestureResults, handleGesture);
       }

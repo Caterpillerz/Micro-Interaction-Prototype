@@ -3,10 +3,10 @@
 import { getSelectedWord } from "./reader_layout.js";
 
 const localGlossary = {
-  // Characters and relationships
   prince: {
     partOfSpeech: "noun",
-    definition: "The son of a king or queen, often a royal ruler in the future.",
+    definition:
+      "The son of a king or queen, often a royal ruler in the future.",
   },
   cinderella: {
     partOfSpeech: "proper noun",
@@ -18,7 +18,8 @@ const localGlossary = {
   },
   stepsister: {
     partOfSpeech: "noun",
-    definition: "A sister related through a stepparent rather than both parents.",
+    definition:
+      "A sister related through a stepparent rather than both parents.",
   },
   stepsisters: {
     partOfSpeech: "noun",
@@ -26,7 +27,8 @@ const localGlossary = {
   },
   stepmother: {
     partOfSpeech: "noun",
-    definition: "The woman married to someone's father who is not their birth mother.",
+    definition:
+      "The woman married to someone's father who is not their birth mother.",
   },
   wife: {
     partOfSpeech: "noun",
@@ -34,17 +36,17 @@ const localGlossary = {
   },
   bride: {
     partOfSpeech: "noun",
-    definition: "A woman on her wedding day or at the time of her marriage.", 
+    definition: "A woman on her wedding day or at the time of her marriage.",
   },
-
-  // Story objects
   slipper: {
     partOfSpeech: "noun",
-    definition: "A light shoe, often worn indoors. In the story, it is the special shoe Cinderella tries on.",
+    definition:
+      "A light shoe, often worn indoors. In the story, it is the special shoe Cinderella tries on.",
   },
   horse: {
     partOfSpeech: "noun",
-    definition: "A large animal that people can ride or use to pull a carriage.",
+    definition:
+      "A large animal that people can ride or use to pull a carriage.",
   },
   stool: {
     partOfSpeech: "noun",
@@ -52,10 +54,9 @@ const localGlossary = {
   },
   foot: {
     partOfSpeech: "noun",
-    definition: "The part of the body at the bottom of the leg that a person stands on.",
+    definition:
+      "The part of the body at the bottom of the leg that a person stands on.",
   },
-
-  // Describing people and feelings
   astonished: {
     partOfSpeech: "adjective",
     definition: "Very surprised by something unexpected.",
@@ -80,8 +81,6 @@ const localGlossary = {
     partOfSpeech: "adjective",
     definition: "Kind, calm, and careful with others.",
   },
-
-  // Actions and expressions
   bowed: {
     partOfSpeech: "verb",
     definition: "Bent the head or body forward to show respect or greeting.",
@@ -96,7 +95,8 @@ const localGlossary = {
   },
   forgive: {
     partOfSpeech: "verb",
-    definition: "To stop feeling angry or resentful toward someone for a mistake or wrong action.",
+    definition:
+      "To stop feeling angry or resentful toward someone for a mistake or wrong action.",
   },
   astonished: {
     partOfSpeech: "adjective",
@@ -124,7 +124,8 @@ const localGlossary = {
   },
   called: {
     partOfSpeech: "verb",
-    definition: "Asked for someone to come, or spoke someone's name to get their attention.",
+    definition:
+      "Asked for someone to come, or spoke someone's name to get their attention.",
   },
   washed: {
     partOfSpeech: "verb",
@@ -134,11 +135,10 @@ const localGlossary = {
     partOfSpeech: "verb",
     definition: "Kept something in the hands or arms.",
   },
-
-  // Important ideas
   kindness: {
     partOfSpeech: "noun",
-    definition: "The quality of being caring, helpful, and considerate toward others.",
+    definition:
+      "The quality of being caring, helpful, and considerate toward others.",
   },
   joy: {
     partOfSpeech: "noun",
@@ -150,15 +150,18 @@ const localGlossary = {
   },
   sorry: {
     partOfSpeech: "adjective",
-    definition: "Feeling regret or sadness about something wrong that happened.",
+    definition:
+      "Feeling regret or sadness about something wrong that happened.",
   },
   heart: {
     partOfSpeech: "noun",
-    definition: "The organ that pumps blood, or a symbol of a person's feelings and kindness.",
+    definition:
+      "The organ that pumps blood, or a symbol of a person's feelings and kindness.",
   },
   smile: {
     partOfSpeech: "noun",
-    definition: "A facial expression in which the corners of the mouth turn upward to show happiness or friendliness.",
+    definition:
+      "A facial expression in which the corners of the mouth turn upward to show happiness or friendliness.",
   },
 };
 
@@ -179,7 +182,6 @@ export async function lookupDefinition(rawWord) {
     return {
       word,
       ...localGlossary[word],
-      source: "Local glossary",
     };
   }
 
@@ -187,7 +189,6 @@ export async function lookupDefinition(rawWord) {
     return {
       word,
       definition: "This word is not in the local glossary yet.",
-      source: "Local glossary",
     };
   }
 
@@ -200,7 +201,6 @@ export async function lookupDefinition(rawWord) {
       return {
         word,
         definition: "No definition was found for this word.",
-        source: "Dictionary",
       };
     }
 
@@ -215,8 +215,6 @@ export async function lookupDefinition(rawWord) {
             word,
             partOfSpeech: meaning.partOfSpeech ?? "",
             definition: firstDefinition.definition,
-            example: firstDefinition.example ?? "",
-            source: "Online dictionary",
           };
         }
       }
@@ -225,13 +223,11 @@ export async function lookupDefinition(rawWord) {
     return {
       word,
       definition: "No definition was found for this word.",
-      source: "Dictionary",
     };
   } catch {
     return {
       word,
       definition: "The dictionary could not be reached. Please try again.",
-      source: "Dictionary unavailable",
     };
   }
 }
@@ -244,9 +240,11 @@ export async function showDefinition() {
 
   const wordElement = document.getElementById("definition-word");
   const bodyElement = document.getElementById("definition-body");
-  const sourceElement = document.getElementById("definition-source");
-
-  if (!wordElement || !bodyElement || !sourceElement) {
+  const partOfSpeechElement = document.getElementById(
+    "definition-part-of-speech",
+  );
+  
+  if (!wordElement || !bodyElement || !partOfSpeechElement) {
     console.error("Dictionary panel elements not found.");
     return;
   }
@@ -254,13 +252,13 @@ export async function showDefinition() {
   if (!word) {
     wordElement.textContent = "No word selected";
     bodyElement.textContent = "Look at a word in the reading area first.";
-    sourceElement.textContent = "";
+    partOfSpeechElement.textContent = "";
     return;
   }
 
   wordElement.textContent = word;
   bodyElement.textContent = "Looking up definition...";
-  sourceElement.textContent = "";
+  partOfSpeechElement.textContent = "";
 
   const result = await lookupDefinition(word);
 
@@ -270,14 +268,7 @@ export async function showDefinition() {
   }
 
   bodyElement.textContent = result.definition;
-
-  sourceElement.textContent = [
-    result.partOfSpeech,
-    result.example ? `Example: ${result.example}` : "",
-    result.source,
-  ]
-    .filter(Boolean)
-    .join(" · ");
+  partOfSpeechElement.textContent = result.partOfSpeech;
 }
 
 export function initializeDefinitionPanel() {

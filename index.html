@@ -28,32 +28,95 @@
         Upload a PDF
         <input id="book-file" type="file" accept="application/pdf" />
       </label> -->
-      <div id="story-select-container">
-        <label for="story-select">Choose a story:</label>
-
-        <select id="story-select">
-          <option value="cinderella">Cinderella</option>
-          <option value="threepigs">Three Little Pigs</option>
-        </select>
-      </div>
 
       <button id="calibrate-button">Calibrate gaze</button>
+
       <span id="status">Initializing...</span>
     </header>
 
     <main class="reader-shell">
-      <aside id="definition-panel">
-        <h2>Dictionary</h2>
-        <p id="definition-word">Look at a word</p>
-        <p id="definition-body">
-          Use the victory gesture to look up the selected word.
-        </p>
-        <p id="definition-source"></p>
+      <div class="reader-sidebar">
+        <details id="setup-panel" open>
+          <summary>Story Setup</summary>
 
-        <button id="test-define-button" type="button">
-          Define selected word (testing)
-        </button>
-      </aside>
+          <div class="setup-controls">
+            <div class="setup-field" id="story-select-container">
+              <label for="story-select">Choose a story:</label>
+              <select id="story-select">
+                <option value="cinderella">Cinderella</option>
+                <option value="threepigs">Three Little Pigs</option>
+              </select>
+            </div>
+
+            <div class="setup-field">
+              <label for="theme-select">Page theme:</label>
+              <select id="theme-select">
+                <option value="classic">Classic</option>
+                <option value="fantasy">Fantasy</option>
+                <option value="horror">Horror</option>
+                <option value="scifi">Sci-Fi</option>
+                <option value="mystery">Mystery</option>
+                <option value="sports">Sports</option>
+              </select>
+            </div>
+          </div>
+        </details>
+
+        <aside id="definition-panel">
+          <h2>Dictionary</h2>
+          <p id="definition-word">Look at a word.</p>
+          <p id="definition-body">
+            Use the victory gesture to define the selected word.
+          </p>
+          <p id="definition-part-of-speech"></p>
+
+          <button id="test-define-button" type="button">
+            Define selected word (testing)
+          </button>
+        </aside>
+
+        <nav id="gesture-toolbar">
+          <div class="gesture-toolbar-item">
+            <img src="images/PinchGesture.png" alt="Pinch gesture" />
+            <span>Zoom in/out</span>
+          </div>
+
+          <div class="gesture-toolbar-item">
+            <img src="images/VictoryGesture.png" alt="Victory gesture" />
+            <span>Definition</span>
+          </div>
+
+          <div class="gesture-toolbar-item">
+            <img src="" alt="" />
+            <span>Prev Page</span>
+          </div>
+
+          <div class="gesture-toolbar-item">
+            <img src="" alt="" />
+            <span>Next Page</span>
+          </div>
+        </nav>
+
+        <details id="camera-preview-panel" open>
+          <summary>Camera Preview</summary>
+
+          <div class="camera-preview-content">
+            <div class="camera-preview">
+              <video id="video" autoplay playsinline muted></video>
+              <canvas id="facemesh-canvas"></canvas>
+            </div>
+
+            <!-- CASEY: your hand debug tools -->
+            <div id="hand-debug">
+              <p>Thumb: <span id="thumb-tip">Not detected</span></p>
+              <p>Index: <span id="index-tip">Not detected</span></p>
+              <p>Total Dis: <span id="total-dist">Not detected</span></p>
+              <p>Hand Gesture: <span id="gest">Not detected</span></p>
+              <p><span id="show-me-my-deffies">Not detected</span></p>
+            </div>
+          </div>
+        </details>
+      </div>
 
       <section id="reading-stage">
         <div id="artwork" class="artwork-placeholder">
@@ -64,48 +127,6 @@
           <div id="story-text"></div>
         </article>
       </section>
-
-      <aside id="page-tools">
-        <h2>Page Tools</h2>
-        <h3>Site Theme</h3>
-
-        <label for="theme-select">Background</label>
-
-        <select id="theme-select">
-          <option value="classic">Classic</option>
-          <option value="fantasy">Fantasy</option>
-          <option value="horror">Horror</option>
-          <option value="scifi">Sci-Fi</option>
-          <option value="mystery">Mystery</option>
-          <option value="sports">Sports</option>
-        </select>
-
-        <h3>Gesture Controls</h3>
-        <div class="gesture">
-          <img src="images/PinchGesture.png" alt="Pinch gesture" style="width: 100%;"/>
-          <p><strong>Pinch:</strong> zoom in/out</p>
-        </div>
-        <div class="gesture">
-          <img src="images/VictoryGestureRedone.png" alt="Victory gesture" style="width: 100%;"/>
-          <p><strong>Victory:</strong> define selected word</p>
-        </div>
-
-        <h3>Camera Preview</h3>
-
-        <div class="camera-preview">
-          <video id="video" autoplay playsinline muted></video>
-          <canvas id="facemesh-canvas"></canvas>
-        </div>
-
-        <!-- CASEY: your hand debug tools -->
-        <div id="hand-debug">
-          <p>Thumb: <span id="thumb-tip">Not detected</span></p>
-          <p>Index: <span id="index-tip">Not detected</span></p>
-          <p>Total Dis: <span id="total-dist">Not detected</span></p>
-          <p>Hand Gesture: <span id="gest">Not detected</span></p>
-          <p><span id="show-me-my-deffies">Not detected</span></p>
-        </div>
-      </aside>
     </main>
 
     <footer class="bottom-bar">

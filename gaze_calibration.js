@@ -337,15 +337,13 @@ export function initializeGazeCalibration({
     }
 
     if (predictions.length < 10) {
-      const message =
-        "We couldn't collect enough steady gaze readings to judge this calibration.\n\n" +
-        "You can continue reading, but we can't yet tell how well the gaze tracker " +
-        "will follow your eyes.\n\n" +
-        "For a better result, check that your face is well lit, both eyes are " +
-        "visible, and the camera can see you clearly.";
-
       status.textContent = "Not enough gaze data to estimate accuracy.";
-      showCalibrationResult(message);
+
+      showCalibrationResult({
+        summary: "Not enough gaze data.",
+        recommendation:
+          "Check that both eyes are visible and the camera is working, then recalibrate and try again.",
+      });
       return;
     }
 
@@ -369,8 +367,6 @@ export function initializeGazeCalibration({
     let summary;
     let recommendation;
 
-    // This is the code that builds the message that we see when we look at
-    // the blue dot in the final calibration phase.
     if (accuracyPercent >= 80 && medianError <= 100) {
       summary = "Calibration looks good.";
       recommendation = "Continue reading. Recalibrate if the gaze dot drifts.";
@@ -384,7 +380,6 @@ export function initializeGazeCalibration({
         "Recalibrate with better lighting and both eyes visible.";
     }
 
-    // Show what has been assigned above.
     showCalibrationResult({
       summary,
       recommendation,
@@ -392,12 +387,6 @@ export function initializeGazeCalibration({
         `Center check: ${accuracyPercent}% within ${radiusPixels}px; ` +
         `median distance ${Math.round(medianError)}px. Center only.`,
     });
-
-    status.textContent =
-      `Center check: ${accuracyPercent}% within ${radiusPixels}px. ` +
-      `Median distance: ${Math.round(medianError)}px.`;
-
-    showCalibrationResult(message);
   }
 
   // -----------------------------
