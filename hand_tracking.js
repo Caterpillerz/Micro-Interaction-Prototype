@@ -85,6 +85,11 @@ export function processGesture(results) {
     const gestureType = gesture.categoryName;
     document.getElementById("gest").textContent = gestureType;
 
+    // pull up definition w/ victory gesture
+    if (gestureType == "Victory") {
+      emitGesture("define-word");
+    }
+
 
     console.log(gestureType);
   }
