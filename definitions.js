@@ -2,6 +2,14 @@
 
 import { getSelectedWord } from "./reader_layout.js";
 
+const storyDescriptions = {
+  cinderella:
+    "A classic fairy tale about a kind young woman whose life changes with a little magic.",
+
+  threepigs:
+    "A traditional folktale about three pigs who build homes and face a hungry wolf.",
+};
+
 const localGlossary = {
   prince: {
     partOfSpeech: "noun",
@@ -232,6 +240,30 @@ export async function lookupDefinition(rawWord) {
   }
 }
 
+function showStoryPlaceholder() {
+  const storySelect = document.getElementById("story-select");
+  const wordElement = document.getElementById("definition-word");
+  const bodyElement = document.getElementById("definition-body");
+  const partOfSpeechElement = document.getElementById(
+    "definition-part-of-speech",
+  );
+
+  if (!wordElement || !bodyElement || !partOfSpeechElement) {
+    return;
+  }
+
+  const storyKey = storySelect?.value;
+  const selectedOption = storySelect?.selectedOptions[0];
+  const storyTitle = selectedOption?.textContent?.trim();
+
+  wordElement.textContent = storyTitle || "Choose a story";
+  bodyElement.textContent =
+    storyDescriptions[storyKey] ||
+    "Choose a story to see its description here.";
+
+  partOfSpeechElement.textContent = "story overview";
+}
+
 // -----------------------------
 // show definition in sidebar
 // -----------------------------
@@ -243,7 +275,7 @@ export async function showDefinition() {
   const partOfSpeechElement = document.getElementById(
     "definition-part-of-speech",
   );
-  
+
   if (!wordElement || !bodyElement || !partOfSpeechElement) {
     console.error("Dictionary panel elements not found.");
     return;
@@ -275,4 +307,10 @@ export function initializeDefinitionPanel() {
   document
     .getElementById("test-define-button")
     ?.addEventListener("click", showDefinition);
+
+  document
+    .getElementById("story-select")
+    ?.addEventListener("change", showStoryPlaceholder);
+
+  showStoryPlaceholder();
 }

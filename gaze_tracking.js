@@ -50,10 +50,9 @@ export function extractGazeFeature(results) {
 }
 
 const gazeDot = document.getElementById("gaze-debug-dot");
-const gazeReadout = document.getElementById("gaze-debug-readout");
 
 export function updateGazeDebugDot(gazePoint) {
-  if (!gazeDot || !gazeReadout) {
+  if (!gazeDot) {
     return;
   }
 
@@ -63,7 +62,6 @@ export function updateGazeDebugDot(gazePoint) {
     !Number.isFinite(gazePoint.y)
   ) {
     gazeDot.hidden = true;
-    gazeReadout.textContent = "Gaze: no prediction";
     return;
   }
 
@@ -73,8 +71,6 @@ export function updateGazeDebugDot(gazePoint) {
   gazeDot.style.left = `${x}px`;
   gazeDot.style.top = `${y}px`;
   gazeDot.hidden = false;
-
-  gazeReadout.textContent = `Gaze: x=${Math.round(x)}, y=${Math.round(y)} px`;
 }
 
 export function createGazeSmoother(alpha = 0.28) {

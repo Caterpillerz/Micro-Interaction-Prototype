@@ -163,7 +163,7 @@ export function initializeGazeCalibration({
   });
 
   // -----------------------------
-  // Calibration helpers
+  // calibration helpers
   // -----------------------------
 
   function delay(ms) {
@@ -236,20 +236,11 @@ export function initializeGazeCalibration({
   ) {
     return new Promise((resolve) => {
       let clickCount = 0;
-      let lastAcceptedClick = -Infinity;
 
       targetDot.textContent = `0/${CLICKS_PER_TARGET}`;
       targetDot.classList.remove("is-complete");
 
       const handleClick = () => {
-        const now = performance.now();
-
-        if (now - lastAcceptedClick < 250) {
-          status.textContent =
-            `Point ${pointIndex}/${totalPoints}: ` +
-            "Pause briefly between clicks while looking at the dot.";
-          return;
-        }
 
         const observations = collectRecentFeatures(650);
 
@@ -258,8 +249,6 @@ export function initializeGazeCalibration({
             "Not enough recent eye samples. Keep your face visible and try again.";
           return;
         }
-
-        lastAcceptedClick = now;
 
         samples.push({
           feature: medianFeature(observations),
@@ -285,7 +274,7 @@ export function initializeGazeCalibration({
         status.textContent = `Point ${pointIndex}/${totalPoints} complete.`;
 
         targetDot.removeEventListener("click", handleClick);
-        window.setTimeout(resolve, 350);
+        resolve();
       };
 
       targetDot.addEventListener("click", handleClick);
@@ -413,36 +402,18 @@ export function initializeGazeCalibration({
 
     calibrationInProgress = true;
 
-    // Casey: commented this out so it can be referred to.
-    // const outerTargets = [
-    //   { x: 0.08, y: 0.08 },
-    //   { x: 0.5, y: 0.08 },
-    //   { x: 0.92, y: 0.08 },
-    //   { x: 0.92, y: 0.5 },
-    //   { x: 0.92, y: 0.92 },
-    //   { x: 0.5, y: 0.92 },
-    //   { x: 0.08, y: 0.92 },
-    //   { x: 0.08, y: 0.5 },
-    // ];
+     const outerTargets = [
+       { x: 0.08, y: 0.08 },
+       { x: 0.5, y: 0.08 },
+       { x: 0.92, y: 0.08 },
+       { x: 0.92, y: 0.5 },
+       { x: 0.92, y: 0.92 },
+       { x: 0.5, y: 0.92 },
+       { x: 0.08, y: 0.92 },
+       { x: 0.08, y: 0.5 },
+     ];
 
-    // Casey: Making it so that all of the calibration dots show up.
-    // Ones at a lower y do not seem to show up for calibration
-    // so I'm putting all of them at y=0.08 so that I can calibrate gaze
-    // to test defining words
-    const outerTargets = [
-      { x: 0.08, y: 0.08 },
-      { x: 0.32, y: 0.08 },
-      { x: 0.68, y: 0.08 },
-      { x: 0.92, y: 0.08 },
-      { x: 0.08, y: 0.5 },
-      { x: 0.32, y: 0.5 },
-      { x: 0.68, y: 0.5 },
-      { x: 0.92, y: 0.5 },
-    ];
-
-    // Casey: just shuffling all these dots on the same y-level for now
-    // const sequence = [...shuffle(outerTargets), { x: 0.5, y: 0.5 }];
-    const sequence = [...shuffle(outerTargets), { x: 0.5, y: 0.29 }];
+    const sequence = [...shuffle(outerTargets), { x: 0.5, y: 0.5 }];
 
     const samples = [];
 
@@ -473,8 +444,6 @@ export function initializeGazeCalibration({
           sequence.length,
           samples,
         );
-
-        await delay(250);
       }
 
       const expectedSamples = sequence.length * CLICKS_PER_TARGET;
