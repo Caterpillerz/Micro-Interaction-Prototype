@@ -79,18 +79,16 @@ export function processHands(results, emitGesture) {
   }
 }
 
-export function processGesture(results) {
+export function processGesture(results, emitGesture) {
   if (results.gestures.length > 0) {
     const gesture = results.gestures[0][0];
     const gestureType = gesture.categoryName;
     document.getElementById("gest").textContent = gestureType;
 
     // pull up definition w/ victory gesture
-    if (gestureType == "Victory") {
+    if (gestureType === "Victory") {
       emitGesture("define-word");
+      document.getElementById("show-me-my-deffies").textContent = gestureType;
     }
-
-
-    console.log(gestureType);
   }
 }

@@ -369,6 +369,8 @@ export function initializeGazeCalibration({
     let summary;
     let recommendation;
 
+    // This is the code that builds the message that we see when we look at
+    // the blue dot in the final calibration phase.
     if (accuracyPercent >= 80 && medianError <= 100) {
       summary = "Calibration looks good.";
       recommendation = "Continue reading. Recalibrate if the gaze dot drifts.";
@@ -382,6 +384,7 @@ export function initializeGazeCalibration({
         "Recalibrate with better lighting and both eyes visible.";
     }
 
+    // Show what has been assigned above.
     showCalibrationResult({
       summary,
       recommendation,
@@ -421,18 +424,36 @@ export function initializeGazeCalibration({
 
     calibrationInProgress = true;
 
+    // Casey: commented this out so it can be referred to.
+    // const outerTargets = [
+    //   { x: 0.08, y: 0.08 },
+    //   { x: 0.5, y: 0.08 },
+    //   { x: 0.92, y: 0.08 },
+    //   { x: 0.92, y: 0.5 },
+    //   { x: 0.92, y: 0.92 },
+    //   { x: 0.5, y: 0.92 },
+    //   { x: 0.08, y: 0.92 },
+    //   { x: 0.08, y: 0.5 },
+    // ];
+
+    // Casey: Making it so that all of the calibration dots show up.
+    // Ones at a lower y do not seem to show up for calibration
+    // so I'm putting all of them at y=0.08 so that I can calibrate gaze
+    // to test defining words
     const outerTargets = [
       { x: 0.08, y: 0.08 },
-      { x: 0.5, y: 0.08 },
+      { x: 0.32, y: 0.08 },
+      { x: 0.68, y: 0.08 },
       { x: 0.92, y: 0.08 },
-      { x: 0.92, y: 0.5 },
-      { x: 0.92, y: 0.92 },
-      { x: 0.5, y: 0.92 },
-      { x: 0.08, y: 0.92 },
       { x: 0.08, y: 0.5 },
+      { x: 0.32, y: 0.5 },
+      { x: 0.68, y: 0.5 },
+      { x: 0.92, y: 0.5 },
     ];
 
-    const sequence = [...shuffle(outerTargets), { x: 0.5, y: 0.5 }];
+    // Casey: just shuffling all these dots on the same y-level for now
+    // const sequence = [...shuffle(outerTargets), { x: 0.5, y: 0.5 }];
+    const sequence = [...shuffle(outerTargets), { x: 0.5, y: 0.29 }];
 
     const samples = [];
 

@@ -201,7 +201,7 @@ function renderLoop() {
       if (gestureRecognizer) {
         const gestureResults = gestureRecognizer.recognizeForVideo(video, timestamp);
 
-        processGesture(gestureResults);
+        processGesture(gestureResults, handleGesture);
       }
     } catch (error) {
       console.error("Vision processing error:", error);
