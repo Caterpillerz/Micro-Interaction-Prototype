@@ -135,14 +135,27 @@ window.readerAPI = {
 // vision pipeline
 // -----------------------------
 
+let timeIntervals = [];
+
 function renderLoop() {
   if (
     faceLandmarker &&
     video.readyState >= 2 &&
     video.currentTime !== lastVideoTime
   ) {
+    // log the timestamp.
     const timestamp = performance.now();
 
+    // // Create an array of time intervals
+    // // of ~500ms.
+    // // ***I'm actually giving it some wiggle room since I've learned
+    // // that the browser cannot read exactly 500 milliseconds as fast
+    // // as I thought it could.
+    // if (timestamp % 500 >= 490 || timestamp % 500 <= 10) {
+    //   timeIntervals.push(timestamp);
+    //   console.log("add newest timestamp.");
+    // }
+  
     try {
       const faceResults = faceLandmarker.detectForVideo(video, timestamp);
 
@@ -216,7 +229,7 @@ function renderLoop() {
       if (handTracker) {
         const handResults = handTracker.detectForVideo(video, timestamp);
 
-        processHands(handResults, handleGesture);
+        processHands(handResults, handleGesture, timestamp, timeIntervals);
         drawHandLandmarks(handResults);
       }
       // Casey: adding the condition for the gesture recognizer
