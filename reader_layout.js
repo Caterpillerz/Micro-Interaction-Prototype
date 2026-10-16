@@ -4,10 +4,12 @@ const storyText = document.getElementById("story-text");
 const artwork = document.getElementById("artwork");
 const pageStatus = document.getElementById("page-status");
 const selectedWordLabel = document.getElementById("selected-word");
+const fontSizeIndicator = document.getElementById("font-size-indicator");
 
 let readingScreens = [];
 let screenIndex = 0;
-let fontSize = 2;
+const BASE_FONT_SIZE_REM = 2;
+let fontSize = BASE_FONT_SIZE_REM;
 
 let currentStoryTitle = "Story";
 let pageIllustrations = [];
@@ -165,11 +167,23 @@ export function previousPage() {
 export function zoomIn() {
   fontSize = Math.min(fontSize + 0.2, 3.4);
   storyText.style.setProperty("--reader-font-size", `${fontSize}rem`);
+  updateFontSizeIndicator();
 }
 
 export function zoomOut() {
   fontSize = Math.max(fontSize - 0.2, 1.4);
   storyText.style.setProperty("--reader-font-size", `${fontSize}rem`);
+  updateFontSizeIndicator();
+}
+
+function updateFontSizeIndicator() {
+  if (!fontSizeIndicator) return;
+
+  const percentage = Math.round(
+    (fontSize / BASE_FONT_SIZE_REM) * 100,
+  );
+
+  fontSizeIndicator.textContent = `Text size: ${percentage}%`;
 }
 
 export function getSelectedWord() {
@@ -255,4 +269,9 @@ export function selectWordAt(x, y) {
   if (selectedWordLabel) {
     selectedWordLabel.textContent = selectedWord;
   }
+}
+
+if (storyText) {
+  storyText.style.setProperty("--reader-font-size", `${fontSize}rem`);
+  updateFontSizeIndicator();
 }

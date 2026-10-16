@@ -3,6 +3,7 @@
 import {
   FilesetResolver,
   FaceLandmarker,
+  HandLandmarker,
   DrawingUtils,
 } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.mjs";
 
@@ -216,6 +217,7 @@ function renderLoop() {
         const handResults = handTracker.detectForVideo(video, timestamp);
 
         processHands(handResults, handleGesture);
+        drawHandLandmarks(handResults);
       }
       // Casey: adding the condition for the gesture recognizer
       if (gestureRecognizer) {
@@ -313,26 +315,46 @@ function drawFaceMesh(results) {
   drawingUtils.drawConnectors(
     landmarks,
     FaceLandmarker.FACE_LANDMARKS_LEFT_EYE,
-    { color: "#40E0D0", lineWidth: 1.5 },
+    { color: "#d27c60", lineWidth: 1.5 },
   );
 
   drawingUtils.drawConnectors(
     landmarks,
     FaceLandmarker.FACE_LANDMARKS_RIGHT_EYE,
-    { color: "#FFCF55", lineWidth: 1.5 },
+    { color: "#d27c60", lineWidth: 1.5 },
   );
 
   drawingUtils.drawConnectors(
     landmarks,
     FaceLandmarker.FACE_LANDMARKS_LEFT_IRIS,
-    { color: "#40E0D0", lineWidth: 2 },
+    { color: "#fffaf1", lineWidth: 2 },
   );
 
   drawingUtils.drawConnectors(
     landmarks,
     FaceLandmarker.FACE_LANDMARKS_RIGHT_IRIS,
-    { color: "#FFCF55", lineWidth: 2 },
+    { color: "#fffaf1", lineWidth: 2 },
   );
+}
+
+function drawHandLandmarks(results) {
+  if (!drawingUtils || !results?.landmarks) {
+    return;
+  }
+
+  for (const landmarks of results.landmarks) {
+    drawingUtils.drawConnectors(landmarks, HandLandmarker.HAND_CONNECTIONS, {
+      color: "#d27c60",
+      lineWidth: 1.25,
+    });
+
+    drawingUtils.drawLandmarks(landmarks, {
+      color: "#fffaf1",
+      fillColor: "#d27c60",
+      lineWidth: 1,
+      radius: 2,
+    });
+  }
 }
 
 initialize();

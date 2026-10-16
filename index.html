@@ -6,11 +6,7 @@
     <title>Interactive Book Reader</title>
     <link rel="stylesheet" href="./styles.css" />
     <script type="module" src="./app.js"></script>
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 0 24 24' width='24'><path d='M0 0h24v24H0z' fill='none'/><path d='M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z' fill='#ffffff'/></svg>"
-    />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -117,21 +113,33 @@
         </details>
       </div>
 
-      <section id="reading-stage">
-        <div id="artwork" class="artwork-placeholder">
-          <p>Illustration for the current passage</p>
+      <div class="reading-stage-shell">
+        <section id="reading-stage">
+          <div id="artwork" class="artwork-placeholder">
+            <p>Illustration for the current passage</p>
+          </div>
+
+          <article id="reading-page">
+            <div id="story-text"></div>
+          </article>
+        </section>
+
+        <div id="font-size-indicator" class="font-size-indicator">
+          Text size: 100%
         </div>
 
-        <article id="reading-page">
-          <div id="story-text"></div>
-        </article>
-      </section>
+        <nav class="reading-pagination" aria-label="Reading page navigation">
+          <button id="previous-button" type="button">Previous</button>
+          <span id="page-status">Page 1</span>
+          <button id="next-button" type="button">Next</button>
+        </nav>
+      </div>
     </main>
 
     <footer class="bottom-bar">
-      <button id="previous-button">Previous</button>
-      <span id="page-status">Page 1</span>
-      <button id="next-button">Next</button>
+      <small class="footer-credit">
+        IMS228 Micro-Interaction Prototype | October 2026
+      </small>
     </footer>
 
     <div id="calibration-modal" class="calibration-modal-overlay" hidden>
@@ -244,14 +252,14 @@
           </div>
 
           <div class="calibration-modal-actions">
+            <button id="calibration-result-close-button" type="button">
+              Continue reading
+            </button>
             <button
-              id="calibration-result-close-button"
+              id="calibration-retry-button"
               type="button"
               class="secondary-button"
             >
-              Continue reading
-            </button>
-            <button id="calibration-retry-button" type="button">
               Calibrate again
             </button>
           </div>
