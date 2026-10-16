@@ -20,6 +20,18 @@ let selectedWord = null;
 let pendingElement = null;
 let pendingSince = 0;
 
+let artworkRequestId = 0;
+
+function animateContent(element) {
+  if (!element) return;
+
+  element.classList.remove("content-enter");
+
+  void element.offsetWidth;
+
+  element.classList.add("content-enter");
+}
+
 function splitIntoScreens(text, sentencesPerScreen = 2) {
   const normalized = text.replace(/\s+/g, " ").trim();
 
@@ -97,6 +109,7 @@ function renderScreen() {
     storyText.textContent = "Choose a story to begin reading.";
     pageStatus.textContent = "No story loaded";
     artwork.replaceChildren();
+    animateContent(storyText);
     return;
   }
 
@@ -107,37 +120,11 @@ function renderScreen() {
   }
 
   const illustrationPath = pageIllustrations[screenIndex];
-
-  if (illustrationPath) {
-    const img = document.createElement("img");
-
-    img.className = "page-illustration";
-    img.src = illustrationPath;
-    img.alt = `${currentStoryTitle}, illustration for segment ${screenIndex + 1}`;
-
-    img.loading = "eager";
-    img.decoding = "async";
-
-    img.onerror = () => {
-      const message = document.createElement("p");
-
-      message.textContent = `Could not load illustration for segment ${screenIndex + 1}.`;
-
-      artwork.replaceChildren(message);
-    };
-
-    artwork.replaceChildren(img);
-  } else {
-    const caption = document.createElement("p");
-
-    caption.textContent =
-      `No illustration assigned for ${currentStoryTitle}, ` +
-      `segment ${screenIndex + 1}.`;
-
-    artwork.replaceChildren(caption);
-  }
+  renderArtwork(illustrationPath, screenIndex + 1);
 
   pageStatus.textContent = `Page ${screenIndex + 1} of ${readingScreens.length}`;
+
+  animateContent(storyText);
 }
 
 export function loadText(text, sentencesPerScreen = 2, options = {}) {
@@ -179,9 +166,7 @@ export function zoomOut() {
 function updateFontSizeIndicator() {
   if (!fontSizeIndicator) return;
 
-  const percentage = Math.round(
-    (fontSize / BASE_FONT_SIZE_REM) * 100,
-  );
+  const percentage = Math.round((fontSize / BASE_FONT_SIZE_REM) * 100);
 
   fontSizeIndicator.textContent = `Text size: ${percentage}%`;
 }
@@ -274,4 +259,62 @@ export function selectWordAt(x, y) {
 if (storyText) {
   storyText.style.setProperty("--reader-font-size", `${fontSize}rem`);
   updateFontSizeIndicator();
+}
+
+function renderArtwork(illustrationPath, segmentNumber) {
+  const requestId = ++artworkRequestId;
+
+  if (!illustrationPath) {
+    artwork.replaceChildren();
+    artwork.classList.remove("has-illustration");
+    return;
+  }
+
+  const nextImage = new Image();
+
+  nextImage.className = "page-illustration";
+  nextImage.alt = `${currentStoryTitle}, illustration for segment ${segmentNumber}`;
+
+  nextImage.decoding = "async";
+  nextImage.src = illustrationPath;
+
+  nextImage
+    .decode()
+    .then(() => {
+      if (requestId !== artworkRequestId) return;
+
+      artwork.classList.add("has-illustration");
+
+      const previousImages = [
+        ...artwork.querySelectorAll(".page-illustration"),
+      ];
+
+      artwork.appendChild(nextImage);
+
+      void nextImage.offsetWidth;
+
+      requestAnimationFrame(() => {
+        if (requestId !== artworkRequestId) {
+          nextImage.remove();
+          return;
+        }
+
+        nextImage.classList.add("is-visible");
+      });
+
+      nextImage.addEventListener("transitionend", (event) => {
+        if (event.propertyName !== "opacity") return;
+        if (requestId !== artworkRequestId) return;
+
+        previousImages.forEach((image) => image.remove());
+      });
+    })
+    .catch(() => {
+      if (requestId !== artworkRequestId) return;
+
+      console.warn("Could not load illustration:", illustrationPath);
+
+      artwork.replaceChildren();
+      artwork.classList.remove("has-illustration");
+    });
 }

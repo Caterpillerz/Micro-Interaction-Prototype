@@ -17,8 +17,6 @@
   --border-color: #d9cdbb;
   --control-background: #fff;
   --control-text: #222;
-  --artwork-background: #f1c490;
-  --artwork-text: #645747;
 
   --border-width: 1px;
   --control-radius: 8px;
@@ -367,27 +365,34 @@ h3,
 /* reading content and artwork                                                */
 /* ========================================================================== */
 
-.artwork-placeholder {
-  display: grid;
+#artwork {
+  position: relative;
   width: 100%;
-  height: clamp(280px, 40vh, 460px);
-  place-items: center;
+  height: 0;
   overflow: hidden;
   border-radius: var(--panel-radius);
-  background: var(--artwork-background);
-  color: var(--artwork-text);
-  text-align: center;
+}
+
+#artwork.has-illustration {
+  height: clamp(280px, 40vh, 460px);
 }
 
 #artwork .page-illustration {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
-  min-width: 0;
-  min-height: 0;
   border-radius: var(--illustration-radius);
   object-fit: cover;
   object-position: center;
+
+  opacity: 0;
+  transition: opacity 220ms ease-in-out;
+}
+
+#artwork .page-illustration.is-visible {
+  opacity: 1;
 }
 
 #reading-page {
@@ -527,6 +532,9 @@ h3,
   cursor: pointer;
   user-select: none;
   touch-action: manipulation;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
 }
 
 #calibration-target.is-complete {
@@ -694,6 +702,116 @@ h3,
 }
 
 /* ========================================================================== */
+/* animations                                                                 */
+/* ========================================================================== */
+
+.content-enter {
+  animation: content-enter 200ms ease-out both;
+}
+
+@keyframes content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.calibration-modal-overlay:not([hidden]) {
+  animation: overlay-enter 160ms ease-out both;
+}
+
+.calibration-modal-window {
+  animation: modal-enter 200ms ease-out both;
+}
+
+@keyframes overlay-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.topbar h1,
+.topbar #calibrate-button,
+.topbar #status,
+#setup-panel,
+#definition-panel,
+.reader-sidebar .gesture-controls,
+#camera-preview-panel,
+.reading-stage-shell,
+.bottom-bar {
+  animation: initial-drop-in 2500ms cubic-bezier(0.16, 0.8, 0.3, 1) both;
+}
+
+@keyframes initial-drop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.topbar h1 {
+  animation-delay: 0ms;
+}
+
+.topbar #calibrate-button {
+  animation-delay: 60ms;
+}
+
+.topbar #status {
+  animation-delay: 120ms;
+}
+
+#setup-panel {
+  animation-delay: 60ms;
+}
+
+#definition-panel {
+  animation-delay: 120ms;
+}
+
+.reader-sidebar .gesture-controls {
+  animation-delay: 180ms;
+}
+
+#camera-preview-panel {
+  animation-delay: 240ms;
+}
+
+.reading-stage-shell {
+  animation-delay: 100ms;
+}
+
+.bottom-bar {
+  animation-delay: 280ms;
+}
+
+/* ========================================================================== */
 /* responsive layout                                                          */
 /* ========================================================================== */
 
@@ -771,12 +889,5 @@ h3,
 
   .calibration-modal-actions button {
     width: 100%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #setup-panel::details-content,
-  #camera-preview-panel::details-content {
-    transition: none;
   }
 }
