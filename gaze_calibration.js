@@ -63,6 +63,7 @@ export function initializeGazeCalibration({
   );
 
   let calibrationInProgress = false;
+  let lastCalibrationFeature = null;
   const CLICKS_PER_TARGET = 3;
 
   // -----------------------------
@@ -241,17 +242,26 @@ export function initializeGazeCalibration({
       targetDot.classList.remove("is-complete");
 
       const handleClick = () => {
-
         const observations = collectRecentFeatures(650);
+        const currentFeature = getLatestFeature();
 
-        if (observations.length < 5) {
+        if (currentFeature) {
+          lastCalibrationFeature = { ...currentFeature };
+        }
+
+        const feature =
+          observations.length > 0
+            ? medianFeature(observations)
+            : lastCalibrationFeature;
+
+        if (!feature) {
           status.textContent =
-            "Not enough recent eye samples. Keep your face visible and try again.";
+            "No eye feature is available yet. Keep your face visible and click again.";
           return;
         }
 
         samples.push({
-          feature: medianFeature(observations),
+          feature: { ...feature },
           target: { ...targetViewport },
         });
 
@@ -393,25 +403,30 @@ export function initializeGazeCalibration({
       return;
     }
 
-    if (!getLatestFeature()) {
+    const initialFeature = getLatestFeature();
+
+    if (!initialFeature) {
       openCalibrationIntro(
         "No eye tracking yet. Face the camera and try again.",
       );
       return;
     }
 
+    lastCalibrationFeature = { ...initialFeature };
     calibrationInProgress = true;
 
-     const outerTargets = [
-       { x: 0.08, y: 0.08 },
-       { x: 0.5, y: 0.08 },
-       { x: 0.92, y: 0.08 },
-       { x: 0.92, y: 0.5 },
-       { x: 0.92, y: 0.92 },
-       { x: 0.5, y: 0.92 },
-       { x: 0.08, y: 0.92 },
-       { x: 0.08, y: 0.5 },
-     ];
+    calibrationInProgress = true;
+
+    const outerTargets = [
+      { x: 0.08, y: 0.08 },
+      { x: 0.5, y: 0.08 },
+      { x: 0.92, y: 0.08 },
+      { x: 0.92, y: 0.5 },
+      { x: 0.92, y: 0.92 },
+      { x: 0.5, y: 0.92 },
+      { x: 0.08, y: 0.92 },
+      { x: 0.08, y: 0.5 },
+    ];
 
     const sequence = [...shuffle(outerTargets), { x: 0.5, y: 0.5 }];
 

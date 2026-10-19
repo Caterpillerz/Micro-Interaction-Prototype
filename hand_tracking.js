@@ -50,6 +50,7 @@ export function processHands(results, emitGesture, timestamp, timeIntervals) {
     let x_distance = indexTip.x - thumbTip.x;
     let distance = (x_distance ** 2) + (y_distance ** 2);
     
+    /*
     document.getElementById("thumb-tip").textContent =
       `4: ${thumbTip.x}, ${thumbTip.y}`;
     document.getElementById("index-tip").textContent =
@@ -58,6 +59,7 @@ export function processHands(results, emitGesture, timestamp, timeIntervals) {
       `4-8: ${distance}`;
     document.getElementById("timestamp").textContent = 
       `${timestamp}`;
+    */
 
     // zoom-out
     if (distance < 0.01) {
@@ -83,10 +85,12 @@ export function processHands(results, emitGesture, timestamp, timeIntervals) {
     }
     
     // log what the array's doing on the website for debugging purposes.
+    /*
     if (timeIntervals.length > 0) {
       document.getElementById("last-timestamp").textContent = 
         `${timeIntervals[timeIntervals.length - 1].time}, ${timeIntervals[timeIntervals.length - 1].position}`;
     }
+        */
 
     // USAGE TIP: when turning the page, the user should swipe quickly and return their hand
     // to its position before the swipe before putting their hand down. That's the least buggy way
@@ -144,12 +148,12 @@ export function processGesture(results, emitGesture) {
   if (results.gestures.length > 0) {
     const gesture = results.gestures[0][0];
     const gestureType = gesture.categoryName;
-    document.getElementById("gest").textContent = gestureType;
+    //document.getElementById("gest").textContent = gestureType;
 
     // pull up definition w/ victory gesture
     if (gestureType === "Victory") {
       emitGesture("define-word");
-      document.getElementById("show-me-my-deffies").textContent = gestureType;
+      //document.getElementById("show-me-my-deffies").textContent = gestureType;
     }
   }
 }
