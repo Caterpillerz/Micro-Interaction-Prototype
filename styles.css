@@ -891,3 +891,8 @@ h3,
     width: 100%;
   }
 }
+
+/* hiding the hand debug tools for the final product */
+#hand-debug {
+  display: none;
+}
