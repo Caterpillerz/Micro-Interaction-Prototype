@@ -17,30 +17,23 @@ const pageThemes = {
 
   horror: {
     name: "Horror",
-    image: "",
-    accent: "#FF0000",
-    font: '"EB Garamond", serif',
+    image: "images/theme-backgrounds/Horror background.png",
+    accent: "#840100",
+    font: '"Jolly Lodger", system-ui',
   },
 
   scifi: {
     name: "Sci-Fi",
-    image: "",
-    accent: "#00FF00",
-    font: '"EB Garamond", serif',
+    image: "images/theme-backgrounds/Sci-Fi.png",
+    accent: "#941ebb",
+    font: '"Audiowide", sans-serif',
   },
 
-  mystery: {
-    name: "Mystery",
-    image: "",
-    accent: "#FFFF00",
-    font: '"EB Garamond", serif',
-  },
-
-  sports: {
-    name: "Sports",
-    image: "",
-    accent: "#8B00FF",
-    font: '"EB Garamond", serif',
+  romance: {
+    name: "Romance",
+    image: "images/theme-backgrounds/Love.png",
+    accent: "#ff8698",
+    font: '"Petit Formal Script", cursive',
   },
 };
 
