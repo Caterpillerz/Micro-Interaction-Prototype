@@ -79,11 +79,11 @@ initializeDefinitionPanel();
 // manual debug controls for testing without hand gestures
 // -----------------------------
 
-document
-  .getElementById("previous-button")
-  .addEventListener("click", previousPage);
+//document
+  //.getElementById("previous-button")
+  //.addEventListener("click", previousPage);
 
-document.getElementById("next-button").addEventListener("click", nextPage);
+//document.getElementById("next-button").addEventListener("click", nextPage);
 
 // -----------------------------
 // hand gesture handling
